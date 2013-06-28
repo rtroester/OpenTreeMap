@@ -1,0 +1,45 @@
+{% extends "treekey/base.html" %}
+
+{% block extra_head %}
+    {% comment %}
+    ** docs say all_misc.js was cleaned out in release 1.1(?) **
+    <script type="text/javascript" src="{{ STATIC_URL }}all_misc.js"></script>
+    {% endcomment %}
+
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery/jquery.query-2.1.7.js"></script>
+    <script src="{{ STATIC_URL }}tablesorter/jquery.tablesorter.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}tablesorter/style.css" media="screen" />
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+        jQuery("#species_list_table").tablesorter({sortList: [[1,0]]})
+        });
+
+    </script>
+{% endblock %}
+
+{% block right_panel %}
+
+	<div id="species_list">
+		<table id="species_list_table">
+			<thead>
+			<tr>
+				<th style="padding:2px;">Common Name</th>
+				<th style="padding:2px;">Scientific Name</th>
+				<th style="padding:2px;">Distinguishing Feature</th>
+				<th style="padding:2px;"> </th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for s in species %}
+			<tr>
+				<td><a href="{{ SITE_ROOT }}treekey/species/{{s.id}}">{{s.common_name}}</a></td>
+				<td>{{s.genus}} {{s.species}}</td>
+				<td>{{s.feature}}</td>
+				<td><a target="_blank" onclick="_gaq.push(['TreeKey', 'Browse Map Button', 'Species', {{species.id}}]);" href="{{ SITE_ROOT }}/map/#?species={{s.id}}">Map</a></td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+
+{% endblock %}

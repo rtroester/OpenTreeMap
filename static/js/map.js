@@ -1,8 +1,8 @@
-tm.start_zoom = 5;
-tm.add_start_zoom = 11;
+tm.start_zoom = 13;
+tm.add_start_zoom = 13;
 tm.add_zoom = 18;
 tm.edit_zoom = 18;
-tm.initial_location_string = "London UK";
+tm.initial_location_string = "Montpelier, VT";
 tm.initial_species_string = "All trees";
 tm.popup_minSize = new OpenLayers.Size(450,200);
 tm.popup_maxSize = new OpenLayers.Size(450,450);
@@ -39,10 +39,11 @@ tm.init_base_map = function(div_id, controls){
     if (!controls) {
         tm.map = new OpenLayers.Map(div_id, {
             maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34),
-            restrictedExtent: restr,
+//          restrictedExtent: restr,
             units: 'm',
             projection: new OpenLayers.Projection("EPSG:900913"),
             displayProjection: new OpenLayers.Projection("EPSG:4326"),
+            numZoomLevels: 18,
             controls: [new OpenLayers.Control.Attribution(),
                        new OpenLayers.Control.Navigation(),
                        new OpenLayers.Control.ArgParser(),
@@ -53,10 +54,11 @@ tm.init_base_map = function(div_id, controls){
     else {
         tm.map = new OpenLayers.Map(div_id, {
             maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34),
-            restrictedExtent: restr,
+//          restrictedExtent: restr,
             units: 'm',
             projection: new OpenLayers.Projection("EPSG:900913"),
             displayProjection: new OpenLayers.Projection("EPSG:4326"),
+            numZoomLevels: 18,
             controls: controls
         });
     }
@@ -79,7 +81,7 @@ tm.init_base_map = function(div_id, controls){
             type: 'png',
             isBaseLayer: false,
             wrapDateLine: true,
-            attribution: "(c) UrbanForestMap.org"
+            attribution: "mtm.montpelier-vt.org"
         }
     );
     tm.tms.buffer = 0;

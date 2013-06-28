@@ -231,9 +231,10 @@ input.button {
 #actionTypeSelection select, #hazardTypeSelection select {
     width:125px;
 }
+/* RT 4/20/13 added ; after padding */
 #actionTypeSelection option, #hazardTypeSelection option, .activeEdit option {
     font-size:12px;
-    padding:0
+    padding:0;
     margin:0;
     background-color: #f2f2f2;
     border:1px solid #e2e2e2;

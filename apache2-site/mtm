@@ -1,0 +1,97 @@
+<VirtualHost *:80>
+	#RT 5/19/13 - Montpelier Tree Map Virtual Host - mtm
+	ServerName mtm.weuns.lan
+	ServerAlias mtm
+	ServerAdmin root@localhost
+
+	#2/10/13 change docroot from /var/www to allow another level
+	#to sep (unused) docroot from OpenTreeMap and wsgi-scripts
+	DocumentRoot /var/www/mtmDocRoot
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /var/www/mtmDocRoot/>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	WSGIDaemonProcess localhost processes=2 threads=15 display-name=%{GROUP}
+	WSGIProcessGroup localhost
+
+        #RT 4/27/13 copy robots.txt from templates/treemap to static
+	#Alias /robots.txt /var/www/OpenTreeMap/templates/treemap/robots.txt
+	Alias /favicon.ico /var/www/mtm/static/images/favicon.ico
+	Alias /robots.txt /var/www/mtm/static/robots.txt
+
+	#RT 4/11/13 not sure where this came from but styles doesn't exist
+	#AliasMatch ^/([^/]*\.css) /var/www/mtm/static/styles/$1
+	AliasMatch ^/([^/]*\.css) /var/www/mtm/static/css/$1
+
+	Alias /media/ /var/www/mtm/media/
+	Alias /static/ /var/www/mtm/static/
+
+	<Directory /var/www/mtm/static>
+		Order deny,allow
+		Allow from all
+	</Directory>
+
+	<Directory /var/www/mtm/media>
+		Order deny,allow
+		Allow from all
+	</Directory>
+
+        #RT 5/6/13 run tilecache under mod_wsgi
+        WSGIScriptAlias /tilecache/ /var/www/tilecache/tilecache-2.11/tilecache.wsgi/
+	<Directory /var/www/tilecache/tilecache-2.11>
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	#test application
+	WSGIScriptAlias /app /var/www/mtm/wsgi-scripts/app.wsgi
+
+	#the real thing
+	#3/18/13 had used /otm, but give in to fact that OTM, especially jlivni
+	#aren't consistent in using {{ SITE_ROOT }} and assume "/" so
+	#we get to OTM with http://localhost/"
+	#6/4/13 that problem is pretty much fixed but anyway the problem
+	#is pretty much gone using a virtual host. now we rename otm.wsgi
+	#to mtm universally.
+	
+	WSGIScriptAlias / /var/www/mtm/wsgi-scripts/mtm.wsgi
+
+	<Directory /var/www/mtm/wsgi-scripts>
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+	<Directory "/usr/lib/cgi-bin">
+		AllowOverride None
+		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	#2/10/13 change from warn
+	LogLevel info
+
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    Alias /doc/ "/usr/share/doc/"
+    <Directory "/usr/share/doc/">
+        Options Indexes MultiViews FollowSymLinks
+        AllowOverride None
+        Order deny,allow
+        Deny from all
+        Allow from 127.0.0.0/255.0.0.0 ::1/128
+    </Directory>
+
+</VirtualHost>
