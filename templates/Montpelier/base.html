@@ -85,7 +85,7 @@
                 <ul id="searchBoxes">
                 <form method="get" action="{% url treemap.views.result_map %}" name="address" class="address" id="search_form">
                     <li id="searchSpeciesBox">
-                      <!-- RT 5/8/13 remove button surrounding List -->
+                      <!-- RT 5/8/13 remove button surrounding List, otherwise it times out in a couple of secs -->
                       <div id="searchSpeciesBrowse">List</div>
                       <input type="text"  id="species_search_input" value="All trees"
                        onFocus='if (this.value == "All trees") { this.value=""; };' />
