@@ -1,4 +1,5 @@
-/* RT 4/29-6/1/13 SanFrancisco with my corrections needed for logo, header, footer */
+/* jlivni sanfrancisco 4/2013 */
+/* RT 4/29-7/27/13 my corrections needed for logo, background, header, footer */
 /* RT 6/27/13 remove css that had been commented out to get rid of clutter */ 
 html {
         background:#fff;
@@ -578,7 +579,10 @@ ul#promoMap li#promoMapEmbed {
         width:1090px;
         height:500px;
         margin:0 auto;
+        background:#fff url(../images/mtm/mtplr5020m.jpg) no-repeat top left;
+     /* original:
         background:#fff url(../images/v2/index_main3.gif) no-repeat top left;
+     */
 }
 #t4_top_left_panel {
         float:left;
