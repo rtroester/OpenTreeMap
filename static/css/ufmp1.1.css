@@ -579,8 +579,9 @@ ul#promoMap li#promoMapEmbed {
         width:1090px;
         height:500px;
         margin:0 auto;
-        background:#fff url(../images/mtm/mtplr5020m.jpg) no-repeat top left;
-     /* original:
+        background:#fff url(../images/mtm/mtplrbackgnd.jpg) no-repeat top left;
+     /* 
+        original:
         background:#fff url(../images/v2/index_main3.gif) no-repeat top left;
      */
 }

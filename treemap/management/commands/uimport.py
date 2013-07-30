@@ -9,6 +9,7 @@ from django.contrib.gis.gdal import SpatialReference, CoordTransform
 from django.contrib.auth.models import User
 from treemap.models import Species, Tree, Plot, Neighborhood, ZipCode, TreeFlags, ImportEvent
 
+# Change explicit value of plot.address_street (see below) as desired.
 # Load CHOICES from your implementation-specific file (e.g. "from choices_SanDiego import *")
 from choices import CHOICES as choices
 
@@ -318,7 +319,7 @@ class Command(BaseCommand):
             plot.geocoded_address = ""
 
         # FIXME: get this from the config?
-        plot.address_state = 'CA'
+        plot.address_state = 'VT'
         plot.import_event = self.import_event
         plot.last_updated_by = self.updater
         plot.data_owner = self.data_owner
@@ -351,7 +352,8 @@ class Command(BaseCommand):
         if row.get('POWERLINE'):
             for k, v in choices['powerlines']:
                 if v == row['POWERLINE']:
-                    plot.powerline = k
+                    #RT 7/26/13 was just 'powerline' tsk-tsk
+                    plot.powerline_conflict_potential = k
                     break;
 
         sidewalk_damage = row.get('SIDEWALK')
