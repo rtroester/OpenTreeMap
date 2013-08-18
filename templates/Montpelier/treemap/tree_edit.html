@@ -128,6 +128,14 @@
         <td style="vertical-align:top;"><a href="#" onclick="$('#edit_condition').trigger('click'); return false;"><img src="{{ STATIC_URL }}images/edit.png" class="editOption" /> </a></td>
             <script>tm.setupEdit("condition", "Tree", {{tree.id}}, {'type':'select', 'loadurl':'choices/conditions/' });</script>
     </tr>
+
+	<tr>
+    	<td class="col1 activeEditRowLabel">Tree pests</td>
+        <td class="activeEditRowValue" id="edit_pests">{{ tree.get_pests_display|default:"Click to edit"  }}</td>
+        <td style="vertical-align:top;"><a href="#" onclick="$('#edit_pests').trigger('click'); return false;"><img src="{{ STATIC_URL }}images/edit.png" class="editOption" /> </a></td>
+            <script>tm.setupEdit("pests", "Tree", {{tree.id}}, {'type':'select', 'loadurl':'choices/pests/' });</script>
+    </tr>
+
 	    <tr>
         	<td class="col1 activeEditRowLabel">Actions</td>
             <td colspan="2" class="activeEditRowValue" id="edit_actions"><span id="actionCount">{{ tree.treeaction_set.count }} </span> actions <span class="viewAddSep"><a href="#" onclick="$('#actionList').show();tm.newAction(); return false" class="viewAdd">{% if field.value.count > 0 %}View and add actions{% else %}Add an action{% endif %}</a></span></td>

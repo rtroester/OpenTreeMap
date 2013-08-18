@@ -12,8 +12,9 @@ CHOICES = {
                 ("10", "Improperly Pruned or Topped"),
             ],
             'pests': [
+                ("0", "None reported"),
                 ("1", "Emerald Ash Borer"),
-                ("2", "Woolly Adelgid"),
+                ("2", "Hemlock Woolly Adelgid"),
                 ("3", "Norway Maple Tar Spot"),
             ],
             'actions': [
@@ -25,15 +26,17 @@ CHOICES = {
                 ("6", "Stakes And Ties Removed"), 
             ],
             'projects': [
-                ("1", "Ash Borer Watch"),
-                ("2", "Adelgid Watch"),
+                ("1", "Montpelier Landmark"),
+                ("2", "Historic Tree"),
+                ("3", "Ash Borer Watch"),
+                ("4", "Adelgid Watch"),
             ],
             'sidewalks': [
                 ("1", "Minor or No Damage"),
                 ("2", "Raised More Than 3/4 Inch"),
             ],
             'powerlines': [
-                ("0", "N/A"),
+                ("0", "PL N/A"),
                 ("1", "None"),
                 ("2", "Mild"),
                 ("3", "Moderate"),
@@ -41,7 +44,7 @@ CHOICES = {
                 ("5", "Fix ASAP"),
             ],
             'conditions': [
-                ("0", "Unknown"),
+                ("0", "Cond N/A"),
                 ("1", "Dead"),
                 ("2", "Poor"),
                 ("3", "Fair"),
@@ -49,14 +52,14 @@ CHOICES = {
                 ("5", "Excellent"),
             ],
             'canopy_conditions': [
-                ("0", "N/A"),
+                ("0", "Trim N/A"),
                 ("1", "Contact"),
                 ("2", "Branch"),
                 ("3", "Leader"),
                 ("4", "Tree Falling"),
             ],
             'plot_types': [
-                ("0", "Unknown"),
+                ("0", "Type N/A"),
                 ("1", "Sidewalk"),
                 ("2", "< 4 ft"),
                 ("3", "> 4 ft"),

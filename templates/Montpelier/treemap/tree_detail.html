@@ -226,6 +226,10 @@
             <td>{{tree.get_condition_display|default:"Missing"}}</td>
         </tr>
         <tr>
+                <td class="col1Wide">Tree pests</td>
+            <td>{{tree.get_pests_display|default:"None reported"}}</td>
+        </tr>
+        <tr>
                 <td class="col1Wide">Alerts</td>
             <td>{{tree.get_alert_count}} known</td>
             <td>{% if tree.get_alert_count > 0 %}<a href="#" id="tree_alerts" onclick="$('#alerts').toggle();return false;">Details</a>{% endif %}</td>
