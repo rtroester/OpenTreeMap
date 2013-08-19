@@ -17,6 +17,10 @@ DATABASES = {
     }
 }
 
+#8/19/13 newly added
+ITREE_REGION = 'NoEastXXX'
+SHOW_ADMIN_EDITS_IN_RECENT_EDITS = True
+
 STATIC_URL = '/static/'
 FORCE_SCRIPT_NAME = ''
 SITE_ROOT = '/'
