@@ -9,7 +9,7 @@ from django.contrib.gis.gdal import SpatialReference, CoordTransform
 from django.contrib.auth.models import User
 from treemap.models import Species, Tree, Plot, Neighborhood, ZipCode, TreeFlags, ImportEvent
 
-# Change explicit value of plot.address_street (see 'TODO' below) as desired.
+# Change explicit value of plot.address_state (see 'FIXME' below) as desired.
 # Load CHOICES from your implementation-specific file (e.g. "from choices_SanDiego import *")
 from choices import CHOICES as choices
 
