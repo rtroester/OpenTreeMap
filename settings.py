@@ -19,7 +19,7 @@ API_KEY_GOOGLE_ANALYTICS = 'your-key-here'
 POSTAL_CODE_FIELD = "USZipCodeField"
 DBH_TO_INCHES_FACTOR = 1.0
 
-ITREE_REGION = 'NorthEast'
+ITREE_REGION = 'NoEastXXX'
 MULTI_REGION_ITREE_ENABLED = False
 
 PENDING_REQUIRED_FOR_PUBLIC_EDITING_PUBLIC_TREES = False
@@ -142,6 +142,26 @@ MIDDLEWARE_CLASSES = (
     'django_sorting.middleware.SortingMiddleware',
 
 )
+
+CLIMATE_ZONE_MAPPINGS = {
+   'Inland Empire': 'InlEmpCLM',
+   'Northeast': 'NoEastXXX',
+   'Pacific Northwest': 'PacfNWLOG',
+   'South': 'PiedmtCLT',
+   'Midwest': 'MidWstMSP',
+   'Northern California Coast': 'CaNCCoJBK',
+   'Lower Midwest': 'LoMidWXXX',
+   'North': 'NMtnPrFNL',
+   'Inland Valleys': 'InlValMOD',
+   'Southern California Coast': 'SoCalCSMA',
+   'Southwest Desert': 'SWDsrtGDL',
+   'Coastal Plain': 'GulfCoCHS',
+   'Central Florida': 'CenFlaXXX',
+   'Interior West':  'InterWABQ',
+   'Tropical': 'TropicPacXXX',
+   'Temperate Interior West': 'TpIntWBOI'
+}
+
 
 try:
     from local_settings import *

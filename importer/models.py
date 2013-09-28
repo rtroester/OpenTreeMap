@@ -15,6 +15,8 @@ from datetime import datetime
 from treemap.models import Species, Neighborhood, Plot,\
     Tree, ExclusionMask, ImportEvent
 
+from eco import benefits
+
 import json
 
 class GenericImportEvent(models.Model):
@@ -428,7 +430,8 @@ class GenericImportRow(models.Model):
         has_errors = False
         for field,choice_key in self.model_fields.CHOICE_MAP.iteritems():
             value = self.datadict.get(field, None)
-            if value:
+            #TODO: Remove hack that checks for '-'
+            if value and value != '-':
                 all_choices = settings.CHOICES[choice_key]
                 choices = { value: id for (id, value) in all_choices }
 
@@ -520,7 +523,10 @@ class SpeciesImportRow(GenericImportRow):
             'v_max_height': fields.species.MAX_HEIGHT,
             'fact_sheet': fields.species.FACT_SHEET,
             'family': fields.species.FAMILY,
-            'other_part_of_name': fields.species.OTHER_PART_OF_NAME
+            'other_part_of_name': fields.species.OTHER_PART_OF_NAME,
+            'id': fields.species.ID,
+            'tree_count': fields.species.TREE_COUNT,
+            'scientific_name': fields.species.SCIENTIFIC_NAME,
         }
 
     # Species reference
@@ -571,12 +577,14 @@ class SpeciesImportRow(GenericImportRow):
         species = self.datadict.get(fields.species.SPECIES,'')
         cultivar = self.datadict.get(fields.species.CULTIVAR,'')
         other_part = self.datadict.get(fields.species.OTHER_PART_OF_NAME,'')
+        family = self.datadict.get(fields.species.FAMILY,'')
 
         # Save these as "empty" strings
         self.cleaned[fields.species.GENUS] = genus
         self.cleaned[fields.species.SPECIES] = species
         self.cleaned[fields.species.CULTIVAR] = cultivar
         self.cleaned[fields.species.OTHER_PART_OF_NAME] = other_part
+        self.cleaned[fields.species.FAMILY] = family
 
         if genus != '' or species != '' or cultivar != '' or other_part != '':
             matching_species = Species.objects\
@@ -640,16 +648,54 @@ class SpeciesImportRow(GenericImportRow):
         return not has_errors
 
     def validate_itree_code(self):
+        default_region = settings.ITREE_REGION
+
+        def is_valid_code(code, region=default_region):
+            # Each region/datatype pair has its own set of benefits
+            # in this case we're using the 'electricity' benefit
+            # as the prototype
+            breaks, data = benefits._get_data(region, 'electricity')
+
+            return code in data
+
         has_error = False
         itreecode = self.datadict.get(fields.species.ITREE_CODE)
+
+        # There are two formats for this column
+        # The first is simply an itree code:
+        # 'CEL OTHER'
+        #
+        # The other is a pairing between regions and itree codes
+        # that looks something like:
+        # <region>:<code>, ...
+        # SoCalCSMA:CEL OTHER, InlEmpCLM:CEL OTHER
         if itreecode:
-            rsrc = Resource.objects.filter(meta_species=itreecode)
-            if len(rsrc) == 0:
-                has_error = True
-                self.append_error(errors.INVALID_ITREE_CODE,
-                                  (fields.species.ITREE_CODE,))
+            rsrcs = []
+
+            if ':' in itreecode:
+                codes = [regioncode.split(':')
+                         for regioncode in itreecode.split(',')]
+
+                for region, code in codes:
+                    if is_valid_code(code, region):
+                        rsrcs.append((code, region))
+                    else:
+                        has_error = True
+                        self.append_error(errors.INVALID_ITREE_CODE,
+                                          (fields.species.ITREE_CODE,),
+                                          {'region': region,
+                                           'code': code})
+                        break
+
+                if not has_error:
+                    self.cleaned[fields.species.RESOURCE] = rsrcs
             else:
-                self.cleaned[fields.species.RESOURCE] = rsrc[0]
+                if is_valid_code(itreecode):
+                    self.cleaned[fields.species.RESOURCE] = [(itreecode,None)]
+                else:
+                    has_error = True
+                    self.append_error(errors.INVALID_ITREE_CODE,
+                                      (fields.species.ITREE_CODE,))
         else:
             has_error = True
             self.append_error(errors.MISSING_ITREE_CODE,
@@ -716,6 +762,8 @@ class SpeciesImportRow(GenericImportRow):
                 if all([diff.keys() == ['id'] for diff in diffs]):
                     self.merged = True
                     same = True
+
+                    self.species = species[0]
                 else:
                     diff_keys = set()
 
@@ -746,6 +794,10 @@ class SpeciesImportRow(GenericImportRow):
         # First validate
         if not self.validate_row():
             return False
+
+        if self.status == SpeciesImportRow.SUCCESS:
+            # Nothing changed!
+            return True
 
         # Get our data
         data = self.cleaned
@@ -781,10 +833,21 @@ class SpeciesImportRow(GenericImportRow):
         if species_edited:
             species.save()
 
-        resource = data[fields.species.RESOURCE]
+        resources = data[fields.species.RESOURCE]
 
         species.resource.clear()
-        species.resource.add(resource)
+
+        for code, region in resources:
+            r = Resource.objects.filter(meta_species=code,
+                                        region=region)
+
+            if r.exists():
+                resource = r[0]
+            else:
+                resource = Resource.objects.create(meta_species=code,
+                                                   region=region)
+
+            species.resource.add(resource)
 
         species.save()
         resource.save()
