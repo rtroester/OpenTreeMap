@@ -39,7 +39,7 @@ tm.init_base_map = function(div_id, controls){
     if (!controls) {
         tm.map = new OpenLayers.Map(div_id, {
             maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34),
-            restrictedExtent: restr,
+//          restrictedExtent: restr,
             zoomMethod: null, // fix animation lag
             units: 'm',
             projection: new OpenLayers.Projection("EPSG:900913"),
