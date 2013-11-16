@@ -837,6 +837,11 @@ var I = {};
      * Update a given panel
      */
     I.updatePane = function (pane) {
+        // Clear merge data
+        if (pane && pane.mergeModel) {
+            pane.mergeModel = null;
+        }
+
         I.api.fetchPanel(pane)
             .done(I.views.rowCountUpdater(pane))
             .pipe(setter(pane, 'data'))
@@ -998,9 +1003,10 @@ I.init.status = function() {
     $("#createtrees").click(function() {
         I.rt.mode = 'create';
         I.api.commitEdit(I.importevent)
-
-        window.location =
-            window.location.pathname.match('(.*/importer/).*$')[1];
+            .done(function() {
+                window.location =
+                    window.location.pathname.match('(.*/importer/).*$')[1];
+            });
     });
 
     // Initially show first panel
